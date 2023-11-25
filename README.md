@@ -15,7 +15,7 @@ Features included in this project:
 ![image](https://github.com/NaufalGhifari/2A2S-Final-Project/assets/85378958/3342d3cb-7e46-465d-b2ee-10f04d8b4d4e)
 
 # 👨‍💻 How to get 2A2S running
-1. Make sure you have [Python](https://www.python.org/downloads/)
+1. Make sure you have [Python](https://www.python.org/downloads/) (version [3.10.7](https://www.python.org/downloads/release/python-3107/) is compatible)
 2. Open cloned repo in the terminal.
 3. Install all dependencies from [requirements.txt](https://github.com/NaufalGhifari/2A2S-Final-Project/blob/main/documentations/requirements.txt) with ```pip install -r /documentations/requirements.txt```.
 4. Run the application with ```python main.py```
