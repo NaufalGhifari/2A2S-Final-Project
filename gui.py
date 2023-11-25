@@ -1,3 +1,8 @@
+"""
+    # gui.py
+    Handles the GUI part of the project
+"""
+
 # object detection =====================
 from ultralytics import YOLO
 import cv2 as cv
@@ -12,6 +17,9 @@ class App:
         self.master = master
         self.master.title("2A2S GUI")
 
+        # load pretrained model
+        self.model = YOLO('yolov8n.pt')
+
         self.label = tk.Label(self.master, text="2A2S Graphical User Interface (GUI)")
         self.label.pack()
 
@@ -19,6 +27,15 @@ class App:
         self.cap = cv.VideoCapture(0)
         self.cap.set(cv.CAP_PROP_FRAME_WIDTH, 800)
         self.cap.set(cv.CAP_PROP_FRAME_HEIGHT, 600)
+
+        # setup supervision BoxAnnotator
+        self.boxAnnotator = sv.BoxAnnotator(
+            thickness = 2,
+            text_thickness = 2,
+            text_scale = 1
+        )
+
+        # update the video in the GUI
         self.update_cap()
 
     
@@ -28,13 +45,22 @@ class App:
         2. Converts to tkinter image format
         3. Update the window
         """
-        ret, frame = self.cap.read()
+        success, img = self.cap.read()
 
-        if ret:
-            rgb_image = cv.cvtColor(frame, cv.COLOR_BGR2RGB) # convert BGR to RGB
+        if success:
+            # get detections
+            results = self.model(img)[0]
+            detections = sv.Detections.from_ultralytics(results)
 
-            img = Image.fromarray(rgb_image)
-            img_tk = ImageTk.PhotoImage(img) # convert to tkinter image format
+            # annotate images
+            img = self.boxAnnotator.annotate(
+                scene=img,
+                detections=detections
+            )
+
+            rgb_image = cv.cvtColor(img, cv.COLOR_BGR2RGB) # convert BGR to RGB
+            pil_img = Image.fromarray(rgb_image)
+            img_tk = ImageTk.PhotoImage(pil_img) # convert to tkinter image format
 
             # update tkinter label with the new image
             self.label.img = img_tk
@@ -42,7 +68,6 @@ class App:
 
         # only update every 30 milisecs to improve performance
         self.master.after(30, self.update_cap)
-
 
     def close(self):
         """

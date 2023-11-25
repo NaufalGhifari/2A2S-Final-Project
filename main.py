@@ -1,5 +1,6 @@
 """
-main.py 
+    # main.py 
+    main file of the project
 """
 
 from gui import run_gui
