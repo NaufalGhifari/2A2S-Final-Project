@@ -12,3 +12,5 @@ def gpu_check():
     else:
         print("CUDA (GPU) is not available. Using CPU.")
         return False
+
+gpu_check()

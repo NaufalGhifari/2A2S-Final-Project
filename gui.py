@@ -7,6 +7,7 @@
 from ultralytics import YOLO
 import cv2 as cv
 import supervision as sv
+import torch
 
 # gui ==================================
 import tkinter as tk
@@ -23,10 +24,13 @@ class App:
         self.master = master
         self.master.title("2A2S GUI")
 
-        # load pretrained model
-        #self.model = YOLO('yolov8n.pt')
-        self.model = YOLO('./data/weights/[25_epochs]trained_smoke_V1.1.pt')
-
+        # define & load model using GPU if available
+        model_path = 'yolov8n.pt'
+        self.model = YOLO(model_path)
+        if(self.gpu_check() == True):
+            # pass
+            self.model.to('cuda')
+            
         self.label = tk.Label(self.master, text="2A2S Graphical User Interface (GUI)")
         self.label.pack()
 
@@ -45,6 +49,14 @@ class App:
         # update the video in the GUI
         self.update_cap()
 
+    def gpu_check(self):
+        """Checks if a GPU is available. Returns boolean."""
+        if torch.cuda.is_available():
+            print("CUDA (GPU) is available. Version: ", torch.version.cuda)
+            return True
+        else:
+            print("CUDA (GPU) is not available. Using CPU.")
+            return False
     
     def update_cap(self):
         """
