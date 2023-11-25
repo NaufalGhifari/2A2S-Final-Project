@@ -48,5 +48,5 @@ Fix:
 1. First do ``````pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121``````
 2. Then ```pip install torchvision==0.16.0+cu121 -f https://download.pytorch.org/whl/torch_stable.html```  
 Note: For some reason the first command does not install torchvision with CUDA. Second command will fix the issue.  
-Source: https://discuss.pytorch.org/tnotimplementederror-could-not-run-torchvision-nms-with-arguments-from-the-cuda-backend-this-could-be-because-the-operator-doesnt-exist-for-this-backend/132352/3
+Source: https://discuss.pytorch.org/t/notimplementederror-could-not-run-torchvision-nms-with-arguments-from-the-cuda-backend-this-could-be-because-the-operator-doesnt-exist-for-this-backend/132352
 
