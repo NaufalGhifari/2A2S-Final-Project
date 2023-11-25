@@ -60,8 +60,9 @@ stack-data==0.6.3
 supervision==0.15.0
 sympy==1.12
 thop==0.1.1.post2209072238
-torch==2.1.0
-torchvision==0.16.0
+torch==2.1.0+cu121
+torchaudio==2.1.0+cu121
+torchvision==0.16.0+cu121
 tornado==6.3.3
 tqdm==4.66.1
 traitlets==5.11.2
