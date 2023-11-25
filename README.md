@@ -1,7 +1,7 @@
 # 2A2S-Final-Project
 AI augmenteed Surveillance System: A CCTV system augmented with:motion detection and object detection models with email alert feature
 
-# 💡 2A2S Features
+# 💡2A2S Features
 Features included in this project:  
 - GUI
 - Motion detection
@@ -20,17 +20,17 @@ Features included in this project:
 3. type ```python main.py```
 4. You are using 2A2S!
 
-# 🐍 Python packages
-- OpenCV
-- Pillow
-- Ultralytics
-- Supervision
+# 🐍Python packages
+- [OpenCV](https://pypi.org/project/opencv-python/)
+- [Pillow](https://pypi.org/project/Pillow/)
+- [Ultralytics](https://pypi.org/project/ultralytics/)
+- [Supervision](https://pypi.org/project/supervision/)
 
-# 👷‍♂️ To-Do:
+# 👷‍♂To-Do:
 - [x] Setup GUI
-- [] Implement motion detection
-- [] Implement object detection models:
-  - [] Fire
-  - [] Smoke
-  - [] Intruder
-- [] Email alert system
+- [ ] Implement motion detection
+- [ ] Implement object detection models:
+  - [ ] Fire
+  - [ ] Smoke
+  - [ ] Intruder
+- [ ] Email alert system
