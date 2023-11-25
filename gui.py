@@ -13,12 +13,19 @@ import tkinter as tk
 from PIL import Image, ImageTk
 
 class App:
+    """
+
+    """
     def __init__(self, master):
+        """
+
+        """
         self.master = master
         self.master.title("2A2S GUI")
 
         # load pretrained model
-        self.model = YOLO('yolov8n.pt')
+        #self.model = YOLO('yolov8n.pt')
+        self.model = YOLO('./data/weights/[25_epochs]trained_smoke_V1.1.pt')
 
         self.label = tk.Label(self.master, text="2A2S Graphical User Interface (GUI)")
         self.label.pack()
@@ -41,9 +48,9 @@ class App:
     
     def update_cap(self):
         """
-        1. Converts GRB to RGB
-        2. Converts to tkinter image format
-        3. Update the window
+            1. Converts GRB to RGB
+            2. Converts to tkinter image format
+            3. Update the window
         """
         success, img = self.cap.read()
 
