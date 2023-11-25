@@ -17,6 +17,8 @@ class App:
 
         # test opencv cap
         self.cap = cv.VideoCapture(0)
+        self.cap.set(cv.CAP_PROP_FRAME_WIDTH, 800)
+        self.cap.set(cv.CAP_PROP_FRAME_HEIGHT, 600)
         self.update_cap()
 
     
