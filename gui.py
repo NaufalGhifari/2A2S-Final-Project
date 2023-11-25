@@ -58,9 +58,8 @@ class App:
                 detections=detections
             )
 
-            rgb_image = cv.cvtColor(img, cv.COLOR_BGR2RGB) # convert BGR to RGB
-            pil_img = Image.fromarray(rgb_image)
-            img_tk = ImageTk.PhotoImage(pil_img) # convert to tkinter image format
+            # make img compatible with tk
+            img_tk = self.cv_cap_to_tkinter_image(img)
 
             # update tkinter label with the new image
             self.label.img = img_tk
@@ -68,6 +67,23 @@ class App:
 
         # only update every 30 milisecs to improve performance
         self.master.after(30, self.update_cap)
+
+    def cv_cap_to_tkinter_image(self, input):
+        """
+            cv2 VideoCapture stores video as a numpy array, this is not compatible with tkinter.  
+            Use PIL to convert it into a tkinter compatible image.
+            1. Convert BGR to RGB 
+            2. Convert array to Image class
+            3. Convert Image to tk compatible image
+        """
+        # convert BGR to RGB
+        rgb_image = cv.cvtColor(input, cv.COLOR_BGR2RGB) 
+        
+        # convert to tkinter image format
+        pil_img = Image.fromarray(rgb_image)
+        tkinter_img = ImageTk.PhotoImage(pil_img) 
+        
+        return tkinter_img
 
     def close(self):
         """
