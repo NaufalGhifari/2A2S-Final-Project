@@ -1,5 +1,5 @@
 """
-    # gui.py
+    # app.py
     Handles the GUI part of the project
 """
 
@@ -34,7 +34,7 @@ class App:
         self.label = tk.Label(self.master, text="2A2S Graphical User Interface (GUI)")
         self.label.pack()
 
-        # test opencv cap
+        # capture video feed
         self.cap = cv.VideoCapture(0)
         self.cap.set(cv.CAP_PROP_FRAME_WIDTH, 800)
         self.cap.set(cv.CAP_PROP_FRAME_HEIGHT, 600)

@@ -1,4 +1,4 @@
-# Torch and Cuda documentation for this project machine's
+# Torch and Cuda documentation for this project main machine.
 This document aims to detail any specfic version of softwares, packages, and drivers in the event any compatibility issues arises.
 
 ## My GPU (RTX-3060 Mobile) initial stats:
@@ -19,8 +19,22 @@ Sat Nov 25 13:53:52 2023
 
 ## Update from CUDA 11.6 to 12.1  
 CUDA 12.1: https://developer.nvidia.com/cuda-12-1-0-download-archive?target_os=Windows&target_arch=x86_64&target_version=11&target_type=exe_local  
-PyTorch install: ```pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121```  
-If "NotImplementedError: Could not run 'torchvision::nms'", see below.  
+PyTorch install: ```pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121```   
+
+Sat Nov 25 16:33:35 2023  
++---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 531.14                 Driver Version: 531.14       CUDA Version: 12.1     |
+|-----------------------------------------+----------------------+----------------------+
+| GPU  Name                      TCC/WDDM | Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf            Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                                         |                      |               MIG M. |
+|=========================================+======================+======================|
+|   0  NVIDIA GeForce RTX 3060 L...  WDDM | 00000000:01:00.0  On |                  N/A |
+| N/A   49C    P8               12W /  N/A|    300MiB /  6144MiB |     19%      Default |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+  
+If "NotImplementedError: Could not run 'torchvision::nms'" error arises, see below.  
+
 
 ## Fixed pip install
 command: ```python -m pip install --upgrade pip```  
