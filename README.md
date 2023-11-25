@@ -30,8 +30,10 @@ Features included in this project:
 # 👷‍♂ To-Do:
 - [x] Setup GUI
 - [ ] Implement motion detection
+- [ ] Add timer function
 - [ ] Implement object detection models:
   - [ ] Fire
   - [ ] Smoke
   - [ ] Intruder
+- [ ] Add save recording function
 - [ ] Email alert system
