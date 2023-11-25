@@ -28,7 +28,7 @@ class App:
         model_path = 'yolov8n.pt'
         self.model = YOLO(model_path)
         if(self.gpu_check() == True):
-            # pass
+            print("Switching to GPU...")
             self.model.to('cuda')
             
         self.label = tk.Label(self.master, text="2A2S Graphical User Interface (GUI)")
