@@ -1,7 +1,17 @@
 # 2A2S-Final-Project
 AI augmenteed Surveillance System: A CCTV system augmented with:motion detection and object detection models with email alert feature
 
-# 💡 2A2S workflow
+# 💡 2A2S Features
+Features included in this project:  
+- GUI
+- Motion detection
+- Object detection
+  - Fire
+  - Smoke
+  - Intruder
+- Email alert system
+
+## Workflow
 ![image](https://github.com/NaufalGhifari/2A2S-Final-Project/assets/85378958/3342d3cb-7e46-465d-b2ee-10f04d8b4d4e)
 
 # 👨‍💻 How to get 2A2S running
