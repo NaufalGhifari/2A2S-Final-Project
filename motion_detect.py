@@ -37,16 +37,16 @@ class Motion_Detector():
                 frame_bw = cv.GaussianBlur(frame_bw, (5, 5), 0)
 
                 difference = cv.absdiff(frame_bw, start_frame)
-                threshold = cv.threshold(difference, 25, 255, cv.THRESH_BINARY)[1]
+                threshold = cv.threshold(difference, 25, 255, cv.THRESH_BINARY)[1] # below 25 -> 0, above 25 -> 255
                 start_frame = frame_bw
 
                 # if theres movement above a certain value, increase scanning_counter
                 if threshold.sum() > 300:
-                    scanning_counter += 1
+                    self.scanning_counter += 1
                 else:
                     # reduce back to 0 if we dont see enough movement
-                    if scanning_counter > 0:
-                        scanning_counter -= 1
+                    if self.scanning_counter > 0:
+                        self.scanning_counter -= 1
 
                 cv.imshow("Cam", threshold) # show black and white vision
             
@@ -54,9 +54,23 @@ class Motion_Detector():
                 cv.imshow("Cam", frame) # show normal vision
             
             # trigger object detection if motion is beyond threshold 
-            if scanning_counter > self.scanning_threshold:
+            if self.scanning_counter > self.scanning_threshold:
                 self.scanningIsON = True
                 threading.Thread(target=self.trigger_object_scanning).start()
+            
+        # =================================================
+        # TODO: REMOVE
+            key_pressed = cv.waitKey(30)
+            if key_pressed == ord("t"):
+                self.scanning_mode = not self.scanning_mode
+                self.scanning_counter = 0
+            if key_pressed == ord("q"):
+                self.scanning_mode = False
+                break
+
+        self.cap.release()
+        cv.destroyAllWindows()
+        # ==================================================
 
     def trigger_object_scanning(self):
         for i in range(5):
