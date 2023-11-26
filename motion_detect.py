@@ -59,7 +59,8 @@ class Motion_Detector():
                 threading.Thread(target=self.trigger_object_scanning).start()
             
         # =================================================
-        # TODO: REMOVE
+        # TODO: 1. Link to GUI
+        # TODO: 2. REMOVE
             key_pressed = cv.waitKey(30)
             if key_pressed == ord("t"):
                 self.scanning_mode = not self.scanning_mode
