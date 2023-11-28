@@ -26,14 +26,19 @@ Features included in this project:
 - [Pillow](https://pypi.org/project/Pillow/)
 - [Ultralytics](https://pypi.org/project/ultralytics/)
 - [Supervision](https://pypi.org/project/supervision/)
+- [PyTorch](https://pytorch.org/get-started/locally/)
 
 # 👷‍♂ To-Do:
-- [x] Setup GUI
-- [ ] Implement motion detection
-- [ ] Add timer function
-- [ ] Implement object detection models:
+- [x] Initialise project
+- [x] Implement motion detection
+- [ ] Implement logs for motion detection
+- [x] Add timer function
+- [ ] Train object detection models:
   - [ ] Fire
   - [ ] Smoke
   - [ ] Intruder
+- [ ] Implement trained models
+- [ ] Implement logs for object detections
 - [ ] Add save recording function
 - [ ] Email alert system
+- [ ] Implement GUI
