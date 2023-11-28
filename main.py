@@ -3,8 +3,13 @@
     main file of the project
 """
 import cv2
-#from app import run_gui
 import motion_detect
+
+#import gui
+#import tkinter as tk
+#import time
+
+#from app import run_gui
 
 def startMessage():
     print("\n+========================================+")
@@ -14,13 +19,24 @@ def startMessage():
 
 def main():
     #run_gui()
-
+    
     cap = cv2.VideoCapture(0)
 
+    # TODO: initialise GUI    
+
+    # TODO: link motion detect w app 
     motion_sensor = motion_detect.Motion_Detector(cap)
     motion_sensor.scanning_for_motion()
 
+    # TODO: initialise object detection model
 
+    # TODO: save snippet
+
+    # TODO: alert email
+
+    # TODO: display video in tk window (gui)
+    
+    
 
 if (__name__ == "__main__"):
     startMessage()

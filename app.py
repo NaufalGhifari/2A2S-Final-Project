@@ -1,6 +1,11 @@
 """
     # app.py
     Handles the GUI part of the project
+
+    ISSUE: 
+    - Feed only updates during object detecting mode
+    - VERY MONOLITHIC
+    - SPAGHETTI INSPIRED
 """
 
 # object detection =====================
