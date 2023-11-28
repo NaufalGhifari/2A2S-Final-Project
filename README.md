@@ -26,7 +26,7 @@ Features included in this project:
 - [Pillow](https://pypi.org/project/Pillow/)
 - [Ultralytics](https://pypi.org/project/ultralytics/)
 - [Supervision](https://pypi.org/project/supervision/)
-- [Torch](https://pytorch.org/get-started/locally/)
+- [PyTorch](https://pytorch.org/get-started/locally/)
 
 # 👷‍♂ To-Do:
 - [x] Initialise project
