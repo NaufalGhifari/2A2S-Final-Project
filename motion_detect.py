@@ -99,6 +99,7 @@ class Motion_Detector():
         # ==================================================
 
 # ====================================================================================================================
+    # Object detection part
 
     def gpu_check(self):
             """Checks if a GPU is available. Returns boolean."""
@@ -151,74 +152,3 @@ class Motion_Detector():
             text_thickness = 2,
             text_scale = 1
         )
-    
-
-
-"""==================================================================================================================="""
-
-"""
-cap = cv.VideoCapture(0)
-cap.set(cv.CAP_PROP_FRAME_WIDTH, 640)
-cap.set(cv.CAP_PROP_FRAME_HEIGHT, 480)
-
-_, start_frame = cap.read()
-start_frame = imutils.resize(start_frame, width=500)
-start_frame = cv.cvtColor(start_frame, cv.COLOR_BGR2GRAY)
-start_frame = cv.GaussianBlur(start_frame, (21, 21), 0)
-
-scanningIsON = False
-scanning_mode = False
-scanning_counter = 0
-
-def trigger_scanning():
-    global scanning
-
-    for i in range(5):
-        if not scanning_mode:
-            break
-        else:
-            print("### ! SCANNING TRIGGERED ", i,  " ! ###")
-    
-    scanningIsON = False
-
-while True:
-    _, frame = cap.read()
-    frame = imutils.resize(frame, width=500)
-
-    if scanning_mode:
-        frame_bw = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
-        frame_bw = cv.GaussianBlur(frame_bw, (5, 5), 0)
-
-        difference = cv.absdiff(frame_bw, start_frame)
-        threshold = cv.threshold(difference, 25, 255, cv.THRESH_BINARY)[1]
-        start_frame = frame_bw
-
-        # if theres movement above a certain value, increase scanning_counter
-        if threshold.sum() > 300:
-            scanning_counter += 1
-        else:
-            # reduce back to 0 if we dont see enough movement
-            if scanning_counter > 0:
-                scanning_counter -= 1
-
-        cv.imshow("Cam", threshold)
-    else:
-        cv.imshow("Cam", frame)
-    
-    if scanning_counter > 20:
-        scanningIsON = True
-        threading.Thread(target=trigger_scanning).start()
-
-    key_pressed = cv.waitKey(30)
-    if key_pressed == ord("t"):
-        scanning_mode = not scanning_mode
-        scanning_counter = 0
-    if key_pressed == ord("q"):
-        scanning_mode = False
-        break
-
-cap.release()
-cv.destroyAllWindows()
-"""
-
-        
