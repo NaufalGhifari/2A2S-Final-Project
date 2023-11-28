@@ -24,8 +24,9 @@ class Motion_Detector():
         self.scanning_mode = False      # whether or not it is currently scanning for MOTION
         self.scanning_counter = 0       # measures the amount of motion
         self.scanning_threshold = 20    # the amount of motion required to trigger scanningIsON
+        self.scan_duration = 5
 
-        self.initialise_object_detector()
+        self.initialise_object_detector('yolov8n.pt')
         
     def scanning_for_motion(self):
         # get the a first frame to compare later
@@ -70,7 +71,7 @@ class Motion_Detector():
                     if self.scanning_counter > 0:
                         self.scanning_counter -= 1
 
-                cv2.imshow("Cam", threshold) # show black and white vision
+                cv2.imshow("Cam", self.frame) # show black and white vision
             
             else:
                 cv2.imshow("Cam", self.frame) # show normal vision
@@ -78,11 +79,10 @@ class Motion_Detector():
             # OBJECT DETECION STARTS HERE
             if self.scanning_counter > self.scanning_threshold:
                 self.scanningIsON = True
-                # threading.Thread(target=self.trigger_object_scanning).start()
+                self.start_object_detector()
 
-            
-            print("self.scanningIsON: ", self.scanningIsON)
-            
+                """ threading.Thread(target=self.start_object_detector).start() """ # does not work for now
+                            
         # =================================================
         # TODO: 1. Link to GUI
         # TODO: 2. REMOVE
@@ -99,16 +99,6 @@ class Motion_Detector():
         # ==================================================
 
 # ====================================================================================================================
-    def trigger_object_scanning(self):
-        for i in range(5):
-            if not self.scanning_mode:
-                break
-            else:
-                # DO SCANNING STUFF HERE
-                print("### ! SCANNING TRIGGERED ", i,  " ! ###")
-        
-        # switch back to off
-        self.scanningIsON = False        
 
     def gpu_check(self):
             """Checks if a GPU is available. Returns boolean."""
@@ -135,13 +125,16 @@ class Motion_Detector():
                 detections=detections
             )
 
-        else:
-            self.detecting_motion = False
+            cv2.imshow("Cam", self.frame)
+            print("Obj Det is running.")
 
-    def initialise_object_detector(self):
+        else:
+            self.scanningIsON = False
+
+    def initialise_object_detector(self, model):
         # load model
         try:
-            model_path = 'yolov8n.pt'
+            model_path = model
             self.model = YOLO(model_path)
         except IOError as err:
             print("[!] Error occured while loading model: ", err)
