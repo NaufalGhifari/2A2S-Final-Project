@@ -14,7 +14,7 @@ import time
 class Motion_Detector():
     """
         Configurable motion detector, linked to object detection model.
-        Adapted from: https://www.youtube.com/watch?v=QPjPyUJeYYE&t=909s
+        
     """
     def __init__(self, cap):
         self.cap = cap
@@ -27,7 +27,11 @@ class Motion_Detector():
         self.scan_duration = 5
 
         self.initialise_object_detector('yolov8n.pt')
-        
+        self.initialise_log_file()
+    
+    ### MOTION DETECTION ### ===================================================================================================== #
+    ### Adapted with modifications from: https://www.youtube.com/watch?v=QPjPyUJeYYE&t=909s
+
     def scanning_for_motion(self):
         # get the a first frame to compare later
         success, start_frame = self.cap.read()
@@ -98,9 +102,18 @@ class Motion_Detector():
         cv2.destroyAllWindows()
         # ==================================================
 
-# ====================================================================================================================
-    # Object detection part
+    ### LOG FILES ### =================================================================================================================== #
+    def initialise_log_file(self):
+        """Prepare log files for motion and object detection"""
+        pass
 
+    def writeMotionLogs(self):
+        """Handles log writing when motion is detected"""
+        pass
+    
+    ### OBJECT DETECTION ### ============================================================================================================= #
+    # Adapted with modifications from: https://www.youtube.com/watch?v=QV85eYOb7gk&t=726s
+    
     def gpu_check(self):
             """Checks if a GPU is available. Returns boolean."""
             if torch.cuda.is_available():
