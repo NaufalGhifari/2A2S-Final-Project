@@ -3,7 +3,7 @@
     main file of the project
 """
 import cv2
-import motion_detect
+import motion_object_detect
 
 #import gui
 #import tkinter as tk
@@ -25,7 +25,7 @@ def main():
     # TODO: initialise GUI    
 
     # TODO: link motion detect w app 
-    motion_sensor = motion_detect.Motion_Detector(cap)
+    motion_sensor = motion_object_detect.Motion_Object_Detector(cap)
     motion_sensor.scanning_for_motion()
 
     # TODO: initialise object detection model

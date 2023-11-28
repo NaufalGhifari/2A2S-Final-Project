@@ -11,20 +11,23 @@ import supervision as sv
 import torch
 import time
 
-class Motion_Detector():
+class Motion_Object_Detector():
     """
-        Configurable motion detector, linked to object detection model.
-        
+        Motion and Object detector class.
+        1. Constantly scanning for movement 
+        2. If movement is detcted, run object detection for 5 seconds
+
+        Input argument: cap -> a cv2.VideoCapture() object as input.
     """
     def __init__(self, cap):
         self.cap = cap
         self.frame = None
 
-        self.scanningIsON = False       # whether or not it is currently scanning for OBJECT
-        self.scanning_mode = False      # whether or not it is currently scanning for MOTION
-        self.scanning_counter = 0       # measures the amount of motion
-        self.scanning_threshold = 20    # the amount of motion required to trigger scanningIsON
-        self.scan_duration = 5
+        self.is_scanning_objects = False    # whether or not it is currently scanning for OBJECT
+        self.is_scanning_motion = False     # whether or not it is currently scanning for MOTION
+        self.scanning_counter = 0           # measures the amount of motion
+        self.scanning_threshold = 20        # the amount of motion required to trigger self.is_scanning_objects
+        self.scan_duration = 5              # how long obj det model runs
 
         self.initialise_object_detector('yolov8n.pt')
         self.initialise_log_file()
@@ -59,7 +62,7 @@ class Motion_Detector():
                 print("Unable to capture second comparison frame")
 
             # only run when motion scanning is on
-            if self.scanning_mode: 
+            if self.is_scanning_motion: 
                 frame_bw = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY)
                 frame_bw = cv2.GaussianBlur(frame_bw, (5, 5), 0)
 
@@ -82,7 +85,7 @@ class Motion_Detector():
             
             # OBJECT DETECION STARTS HERE
             if self.scanning_counter > self.scanning_threshold:
-                self.scanningIsON = True
+                self.is_scanning_objects = True
                 self.start_object_detector()
 
                 """ threading.Thread(target=self.start_object_detector).start() """ # does not work for now
@@ -92,10 +95,10 @@ class Motion_Detector():
         # TODO: 2. REMOVE
             key_pressed = cv2.waitKey(30)
             if key_pressed == ord("t"):
-                self.scanning_mode = not self.scanning_mode
+                self.is_scanning_motion = not self.is_scanning_motion
                 self.scanning_counter = 0
             if key_pressed == ord("q"):
-                self.scanning_mode = False
+                self.is_scanning_motion = False
                 break
 
         self.cap.release()
@@ -113,7 +116,7 @@ class Motion_Detector():
     
     ### OBJECT DETECTION ### ============================================================================================================= #
     # Adapted with modifications from: https://www.youtube.com/watch?v=QV85eYOb7gk&t=726s
-    
+
     def gpu_check(self):
             """Checks if a GPU is available. Returns boolean."""
             if torch.cuda.is_available():
@@ -143,7 +146,7 @@ class Motion_Detector():
             print("Obj Det is running.")
 
         else:
-            self.scanningIsON = False
+            self.is_scanning_objects = False
 
     def initialise_object_detector(self, model):
         # load model
