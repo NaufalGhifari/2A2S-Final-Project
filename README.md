@@ -1,4 +1,4 @@
-# AI augmented Surveillance System - 2A2S
+# AI Augmented Surveillance System - 2A2S
 Off the shelf webcam/CCTV surveillance system augmented with motion detection, object detection models, and email alert system.  
 Final year project for BSc in Computer Science at University of London (AI & Machine Learning).
 
