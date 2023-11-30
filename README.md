@@ -1,5 +1,6 @@
-# 2A2S-Final-Project
-AI augmenteed Surveillance System: A CCTV system augmented with motion detection, object detection models, and email alert system.
+# AI Augmented Surveillance System - 2A2S
+Off the shelf webcam/CCTV surveillance system augmented with motion detection, object detection models, and email alert system.  
+Final year project for BSc in Computer Science at University of London (AI & Machine Learning).
 
 # 💡 2A2S Features
 Features included in this project:  
@@ -27,11 +28,13 @@ Features included in this project:
 - [Ultralytics](https://pypi.org/project/ultralytics/)
 - [Supervision](https://pypi.org/project/supervision/)
 - [PyTorch](https://pytorch.org/get-started/locally/)
+- Other: imutils, time, datetime
 
 # 👷‍♂ To-Do:
 - [x] Initialise project
 - [x] Implement motion detection
-- [ ] Implement logs for motion detection
+- [x] Implement logs for motion detection
+- [ ] Fine tune motion logs
 - [x] Add timer function
 - [ ] Train object detection models:
   - [ ] Fire
@@ -42,3 +45,5 @@ Features included in this project:
 - [ ] Add save recording function
 - [ ] Email alert system
 - [ ] Implement GUI
+
+Author: Muhammad Naufal Al Ghifari
