@@ -10,6 +10,7 @@ from ultralytics import YOLO
 import supervision as sv
 import torch
 import time
+from datetime import date
 
 class Motion_Object_Detector():
     """
@@ -28,6 +29,11 @@ class Motion_Object_Detector():
         self.scanning_counter = 0           # measures the amount of motion
         self.scanning_threshold = 20        # the amount of motion required to trigger self.is_scanning_objects
         self.scan_duration = 5              # how long obj det model runs
+
+        self.motion_logs_path = 'motion_log.txt'
+        self.object_logs_path = 'object_log.txt'
+        self.motion_log = None
+        self.object_logs = None
 
         self.initialise_object_detector('yolov8n.pt')
         self.initialise_log_file()
@@ -83,9 +89,10 @@ class Motion_Object_Detector():
             else:
                 cv2.imshow("Cam", self.frame) # show normal vision
             
-            # OBJECT DETECION STARTS HERE
+            ####################### OBJECT DETECION STARTS HERE ###################################
             if self.scanning_counter > self.scanning_threshold:
                 self.is_scanning_objects = True
+                self.write_motion_logs()
                 self.start_object_detector()
 
                 """ threading.Thread(target=self.start_object_detector).start() """ # does not work for now
@@ -95,6 +102,7 @@ class Motion_Object_Detector():
         # TODO: 2. REMOVE
             key_pressed = cv2.waitKey(30)
             if key_pressed == ord("t"):
+                print("T pressed")
                 self.is_scanning_motion = not self.is_scanning_motion
                 self.scanning_counter = 0
             if key_pressed == ord("q"):
@@ -108,11 +116,37 @@ class Motion_Object_Detector():
     ### LOG FILES ### =================================================================================================================== #
     def initialise_log_file(self):
         """Prepare log files for motion and object detection"""
+        try:
+            self.motion_log = open(self.motion_logs_path, 'a')
+            self.object_log = open(self.object_logs_path, 'a')
+        
+        except Exception as err:
+            print("Unexpected error occured during motion log writing: ", err)
+        else:
+            print("Log files initialised successfully.")
+
+    # IMPROVE: Fine tune log writing, maybe only write every second or minute
+    def write_motion_logs(self):
+        """Handles log writing when MOTION is detected"""
+
+        curr_date, curr_time = self.get_curr_date_time()
+        motion_log_entry = f"Motion detected at {curr_time} on {curr_date}\n"
+        self.motion_log.write(motion_log_entry)
+    
+    # TODO: Write a log for object detection
+    def wrie_object_logs(self):
+        """Handles log writing when OBJECT is detected"""
         pass
 
-    def writeMotionLogs(self):
-        """Handles log writing when motion is detected"""
-        pass
+    def get_curr_date_time(self):
+        """Returns the current date and current time"""
+        t = time.localtime()
+        curr_time = time.strftime("%H:%M:%S", t)
+        curr_date = date.today()
+
+        return curr_date, curr_time
+
+    
     
     ### OBJECT DETECTION ### ============================================================================================================= #
     # Adapted with modifications from: https://www.youtube.com/watch?v=QV85eYOb7gk&t=726s
