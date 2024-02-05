@@ -33,17 +33,18 @@ Features included in this project:
 # 👷‍♂ To-Do:
 - [x] Initialise project
 - [x] Implement motion detection
-- [x] Implement logs for motion detection
-- [ ] Fine tune motion logs
+- [x] Fine tune motion logs
 - [x] Add timer function
 - [ ] Train object detection models:
   - [ ] Fire
   - [ ] Smoke
   - [ ] Intruder
 - [ ] Implement trained models
+- [x] Implement logs for motion detection
 - [ ] Implement logs for object detections
 - [ ] Add save recording function
-- [ ] Email alert system
+- [x] Email alert system for MOTION
+- [ ] Email alert system for OBJECTS
 - [ ] Implement GUI
 
 Author: Muhammad Naufal Al Ghifari
