@@ -5,15 +5,15 @@
 import cv2
 import sys
 import unittest
-from datetime import datetime, date, timedelta
+from datetime import datetime, date, timedelta, time
 
 sys.path.append('..')
-import mySurveilllance
+import Detector
 
 class TestMySurveillance(unittest.TestCase):
     def setUp(self):
         self.cap = cv2.VideoCapture(0)
-        self.Surveillance = mySurveilllance.mySurveillanceClass(self.cap)
+        self.Surveillance = Detector.Detector_2A2S(self.cap)
 
     def test_get_curr_date_time(self):
         # call function
@@ -44,7 +44,23 @@ class TestMySurveillance(unittest.TestCase):
         current_time = datetime.now()
         self.assertGreaterEqual(current_time, self.Surveillance.last_log_time)
 
+    def test_check_time_for_alert(self):
+        alert_time_start = time(hour=20, minute=0)
+        alert_time_end = time(hour=8, minute=0)
+    
+        # Get current time (for testing, set it at 01:00)
+        current_time = time(hour=1, minute=0)
 
+        print(alert_time_start)
+        print(alert_time_end)
+
+        # Check if the current time falls within the alert time bracket
+        result = alert_time_start <= current_time <= alert_time_end
+
+        print(f"result: {result}")
+
+        # Assert the result 
+        self.assertTrue(result)
 
 
 if __name__ == "__main__":

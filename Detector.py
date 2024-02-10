@@ -1,16 +1,23 @@
-import cv2
-from ultralytics import YOLO
-from datetime import datetime, date, timedelta
-import emailAlert
+"""
 
-class mySurveillanceClass:
+
+SYNTAX NOTE: 
+    - Snake case is preferred for general use due to its readability. 
+    - Camelcase is reserved for Booleans to help with comprehension speed.
+"""
+
+import cv2
+import supervision as sv
+from ultralytics import YOLO
+from datetime import datetime, date, timedelta, time
+import Email_Alert
+import torch
+
+class Detector_2A2S:
     
     # INITIALISATION ======================================================================================================
     def __init__(self, cap):
-        # SYNTAX NOTE: 
-        # - Snake case is preferred for general use due to its readability. 
-        # - Camelcase is reserved for Booleans to help with comprehension.
-
+        
         # define the VideoCapture object
         self.cap = cap
 
@@ -34,16 +41,98 @@ class mySurveillanceClass:
         self.objectDetectionIsON = False
         self.obj_scan_duration = 30
         self.obj_scan_time_start = datetime.now()
-        self.model = YOLO("yolov8n.pt")
+        self.model_path = "yolov8n.pt"
 
         # PARAMETERS: Alert system
-        isSendingAlerts = False
-        user_alerter = emailAlert.emailAlertSystem()
+        self.alert_time_start = time(hour=20, minute=0)
+        self.alert_time_end = time(hour=8, minute=0)
+        self.isSendingAlerts = False
+        self.user_alerter = Email_Alert.emailAlertSystem()
+
+        # PARAMETERS: export to GUI
+        self.export_frame = None
+
+        # init object detection attributes
+        self.initialise_object_detector()
+
+    
+    def gpu_check(self):
+            """
+            Checks if a GPU is available. 
+            
+            Return: Boolean"""
+            if torch.cuda.is_available():
+                print("CUDA (GPU) is available. Version: ", torch.version.cuda)
+                return True
+            else:
+                print("CUDA (GPU) is not available. Using CPU.")
+                return False
+
+    def initialise_object_detector(self):
+        """
+        1. Loads object detection model (.pt file)
+        2. Employs GPU if available
+        3. Setup box annotator for objec detections
+        
+        Return: Void
+        """
+        # load model
+        try:
+            self.model = YOLO(self.model_path)
+        except IOError as err:
+            print("[!] Error occured while loading model: ", err)
+            return
+        
+        # use GPU if available
+        if(self.gpu_check() == True):
+            print("Switching to GPU...")
+            self.model.to('cuda')
+        
+        # setup supervision BoxAnnotator
+        self.boxAnnotator = sv.BoxAnnotator(
+            thickness = 2,
+            text_thickness = 2,
+            text_scale = 1
+        )
+    
+    def reset_obj_detector_timer():
+        pass
+
+    def check_time_for_alert(self):
+        """
+        Checks whether or not the program should send alerts based on a specified time bracket.
+
+        Return: Boolean
+        """
+        now = datetime.now()
+        start = datetime.combine(now.date(), self.alert_time_start)
+        end = datetime.combine(now.date(), self.alert_time_end)
+        
+        # if end < start, meaning end is the next day
+        if end < start:
+            end = end + timedelta(days=1)
+        
+        return start <= now <= end
+    
+    def get_export_frame(self):
+        """
+        Retrieves latest frame to use in GUI
+
+        Return: image object
+        """
+        return self.export_frame
 
     # MOTION ============================================================================================================
     def motion_object_scanner(self):
         
         while True:
+            # check current time to send alerts or not
+            if self.check_time_for_alert() == True:
+                self.isSendingAlerts = True
+            else:
+                self.isSendingAlerts = False
+
+            # reset motion detection flag for each frame
             self.motionIsDetected = False
 
             try:
@@ -87,6 +176,14 @@ class mySurveillanceClass:
                     print(f"Switching to MOTION detection (self.objectDetectionIsON = False)")
                 
                 # TODO: do object detection here
+                results = self.model(frame, verbose=False)[0]
+                detections = sv.Detections.from_ultralytics(results)
+
+                frame = self.boxAnnotator.annotate(
+                    scene = frame,
+                    detections = detections,
+                    labels= results.names
+                )
                 
             # MOTION DETECTION =================================================================================================
             else:
@@ -106,11 +203,21 @@ class mySurveillanceClass:
                         self.write_motion_logs()
 
                         # switch to OBJ DETECTION
-                        self.objectDetectionIsON = True
-                        self.obj_scan_time_start = datetime.now()
-                        print(f"Switching to OBJ detection (self.objectDetectionIsON = True)")
+                        self.objectDetectionIsON = True    
+                
+                if self.objectDetectionIsON:
+                    self.obj_scan_time_start = datetime.now()
+                    print(f"Switching to OBJ detection (self.objectDetectionIsON = True)")
 
-            cv2.imshow("2A2S", frame)
+                    # send email alert
+                    if self.isSendingAlerts:
+                        self.user_alerter.send_alert_cli("motion", datetime.now())
+
+            # export to GUI
+            self.export_frame = frame
+
+            # display feed
+            """ cv2.imshow("2A2S", frame) """
 
             if cv2.waitKey(25) & 0xFF == ord('q'):
                 break
@@ -123,7 +230,11 @@ class mySurveillanceClass:
         return curr_date, curr_time
 
     def write_motion_logs(self):
-        """Handles log writing when MOTION is detected"""
+        """
+        Handles log writing when MOTION is detected
+
+        Return: Void
+        """
         
         # only write once every minute
         current_time = datetime.now()
@@ -146,7 +257,7 @@ class mySurveillanceClass:
 
 def main():
     cap = cv2.VideoCapture(0)
-    app = mySurveillanceClass(cap)
+    app = Detector_2A2S(cap)
     app.motion_object_scanner()
 
     cap.release()
