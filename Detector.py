@@ -47,7 +47,7 @@ class Detector_2A2S:
         self.alert_time_start = time(hour=20, minute=0)
         self.alert_time_end = time(hour=8, minute=0)
         self.isSendingAlerts = False
-        self.user_alerter = Email_Alert.emailAlertSystem()
+        self.user_alerter = Email_Alert.email_alert_system()
 
         # PARAMETERS: export to GUI
         self.export_frame = None
@@ -167,11 +167,11 @@ class Detector_2A2S:
             if self.objectDetectionIsON:
                 
                 # only run object detection model for 30 seconds
-                elapsed_time = datetime.now() - self.obj_scan_time_start
-                remaining_time = max(self.obj_scan_duration - elapsed_time.total_seconds(), 0)
+                scan_obj_elapsed_time = datetime.now() - self.obj_scan_time_start
+                remaining_time = max(self.obj_scan_duration - scan_obj_elapsed_time.total_seconds(), 0)
                 cv2.putText(frame, f"[Scanning for OBJECTS ({remaining_time:.0f}s)]", (5, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 0, 0), 2)
                 
-                if(elapsed_time > timedelta(seconds=self.obj_scan_duration)):
+                if(self.scan_obj_elapsed_time > timedelta(seconds=self.obj_scan_duration)):
                     self.objectDetectionIsON = False
                     print(f"Switching to MOTION detection (self.objectDetectionIsON = False)")
                 
@@ -181,8 +181,7 @@ class Detector_2A2S:
 
                 frame = self.boxAnnotator.annotate(
                     scene = frame,
-                    detections = detections,
-                    labels= results.names
+                    detections = detections
                 )
                 
             # MOTION DETECTION =================================================================================================

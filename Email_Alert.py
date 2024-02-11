@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 import smtplib
 
-class emailAlertSystem:
+class email_alert_system:
     def __init__(self):
 
         # sensitive information are stored in .env

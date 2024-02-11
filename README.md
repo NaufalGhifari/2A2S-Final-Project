@@ -19,7 +19,7 @@ Features included in this project:
 1. Make sure you have [Python](https://www.python.org/downloads/) (version [3.10.7](https://www.python.org/downloads/release/python-3107/) is compatible)
 2. Open cloned repo in the terminal.
 3. Install all dependencies from [requirements.txt](https://github.com/NaufalGhifari/2A2S-Final-Project/blob/main/documentations/requirements.txt) with ```pip install -r /documentations/requirements.txt```.
-4. Run the application with ```python main.py```
+4. Run the application with ```python gui.py```
 5. You are using 2A2S!
 
 # 🐍 Python packages
@@ -28,7 +28,9 @@ Features included in this project:
 - [Ultralytics](https://pypi.org/project/ultralytics/)
 - [Supervision](https://pypi.org/project/supervision/)
 - [PyTorch](https://pytorch.org/get-started/locally/)
-- Other: imutils, time, datetime
+- [Tkinter](https://docs.python.org/3/library/tkinter.html)
+- [Threading](https://docs.python.org/3/library/threading.html)
+- Other: sys, unittest, datetime
 
 # 👷‍♂ To-Do:
 - [x] Initialise project
@@ -46,5 +48,8 @@ Features included in this project:
 - [x] Email alert system for MOTION
 - [ ] Email alert system for OBJECTS
 - [ ] Implement GUI
+  - [x] Start program button
+  - [x] Minimum contour slider
+  - [x] Object scan duration slider 
 
 Author: Muhammad Naufal Al Ghifari
