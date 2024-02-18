@@ -37,19 +37,23 @@ Features included in this project:
 - [x] Implement motion detection
 - [x] Fine tune motion logs
 - [x] Add timer function
-- [ ] Train object detection models:
-  - [ ] Fire
-  - [ ] Smoke
-  - [ ] Intruder
-- [ ] Implement trained models
+- [x] Implement trained models
 - [x] Implement logs for motion detection
 - [ ] Implement logs for object detections
-- [ ] Add save recording function
+- [x] Add save snippet function
 - [x] Email alert system for MOTION
 - [ ] Email alert system for OBJECTS
 - [ ] Implement GUI
   - [x] Start program button
   - [x] Minimum contour slider
-  - [x] Object scan duration slider 
+  - [x] Object scan duration slider
+  - [x] Background subtraction history paramter slider
+  - [x] Frame differencing threshold slider
+
+# 👨‍🏫 Further improvements ideas
+- [ ] Train custom object detection models:
+  - [ ] Fire
+  - [ ] Smoke
+  - [ ] Intruder
 
 Author: Muhammad Naufal Al Ghifari

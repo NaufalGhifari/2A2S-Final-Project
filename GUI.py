@@ -8,51 +8,58 @@ class GUI_2A2S:
     def __init__(self, master):
         self.master = master
         self.master.title("2A2S Controls")
-        self.master.geometry("1200x700")
+        self.master.geometry("1200x500")
 
-        # create canvas
-        self.canvas = tk.Canvas(self.master, width=800, height=600)
-        self.canvas.place(x=280, y=0)
-
-        # frame placeholder
-        self.canvas.create_rectangle(0, 0, 630, 480, outline="black", fill="grey", width=2)
-        self.canvas.create_text(315, 225, text="2A2S: AI-Augmented Surveillance System", fill="white")
-        self.canvas.create_text(315, 250, text="Press \"Start Video\" button to start video feed.", fill="white")
-        self.canvas.create_text(315, 275, text="(Allow ~15 seconds to boot up))", fill="white")
-
-        # frame label
-        self.frame_label = tk.Label(self.master, bg="grey")
-        self.frame_label.pack()
+        # frame label (placeholder)
+        self.frame_label = tk.Label(self.master, bg="grey", text="2A2S: AI-Augmented Surveillance System\nPress \"Start Camera\" button to start video feed.\n(Allow ~15 seconds to boot up)", fg="white")
+        self.frame_label.place(x=280, y=10, width=630, height=480)
 
         # start detector
-        self.start_button = tk.Button(self.master, text="Start Video", command=self.start_surveillance)
-        self.start_button.place(x=280, y=500)
+        self.start_button = tk.Button(self.master, text="Start Camera", background="dodgerblue1", fg="azure2", font=("Helvetica", 11, "bold"), command=self.start_surveillance)
+        self.start_button.place(x=15, y=10, width=250, height=125)
 
         # PARAMETER CONTROL ====================================================================================================================
 
         # object detection toggle
         self.set_objectDetectionIsON = False
-        self.object_detection_button = tk.Button(self.master, text="Toggle Object Detection: OFF", command=self.toggle_object_detection)
-        self.object_detection_button.place(x=280, y=550)
+        self.object_detection_button = tk.Button(self.master, text="Toggle Object Detection (OFF)", command=self.toggle_object_detection)
+        self.object_detection_button.place(x=15, y=200, width=250, height=125)
 
-        # min contour
+        # Advanced parameters text
+        self.text_adv_params = tk.Label(self.master, text="[!] Advanced Parameters [!]", font=("Arial", 14, "bold"))
+        self.text_adv_params.place(x=930, y=35)
+
+        # min contour slider
         self.text_min_contour = tk.Label(self.master, text="Minimum contour (0-10,000)")
-        self.text_min_contour.place(x=800, y=500)
-        self.slider_min_contour = tk.Scale(self.master, from_=0, to=10000, orient="horizontal", length=200, command=self.update_min_contour)
-        self.slider_min_contour.set(5000)
-        self.slider_min_contour.place(x=800, y=520)
+        self.text_min_contour.place(x=930, y=100)
+        self.slider_min_contour = tk.Scale(self.master, from_=10, to=1500, orient="horizontal", length=220, command=self.update_min_contour)
+        self.slider_min_contour.set(500)
+        self.slider_min_contour.place(x=930, y=120)
 
-        # obj scan duration
+        # obj scan duration slider
         self.text_obj_scan_duration = tk.Label(self.master, text="Object scanning duration (30-300 seconds)")
-        self.text_obj_scan_duration.place(x=800, y=600)
-        self.slider_obj_scan_duration = tk.Scale(self.master, from_=30, to=300, orient="horizontal", length=200, command=self.update_obj_scan_duration)
-        self.slider_obj_scan_duration.place(x=800, y=620)
+        self.text_obj_scan_duration.place(x=930, y=200)
+        self.slider_obj_scan_duration = tk.Scale(self.master, from_=30, to=300, orient="horizontal", length=220, command=self.update_obj_scan_duration)
+        self.slider_obj_scan_duration.place(x=930, y=220)
+
+        # frame differencing slider
+        self.text_frame_diff_threshold = tk.Label(self.master, text="Frame differencing threshold (10-1,000)")
+        self.text_frame_diff_threshold.place(x=930, y=300)
+        self.slider_frame_diff_threshold = tk.Scale(self.master, from_=10, to=1000, orient="horizontal", length=220, command=self.update_frame_diff_threshold)
+        self.slider_frame_diff_threshold.place(x=930, y=320)
+
+        # background subtraction history slider
+        self.text_bg_subtract_hist = tk.Label(self.master, text="Background subtraction history (5-1,000)")
+        self.text_bg_subtract_hist.place(x=930, y=400)
+        self.slider_bg_subtract_hist = tk.Scale(self.master, from_=5, to=1000, orient="horizontal", length=220, command=self.update_frame_diff_threshold)
+        self.slider_bg_subtract_hist.set(150)
+        self.slider_bg_subtract_hist.place(x=930, y=420)
 
         # =======================================================================================================================================
 
         # quit application
-        self.quit_button = tk.Button(self.master, text="Quit", command=self.quit_application, background="firebrick1", fg="azure2", width=10)
-        self.quit_button.place(x=280, y=600)
+        #self.quit_button = tk.Button(self.master, text="Quit", command=self.quit_application, background="firebrick1", fg="azure2")
+        #self.quit_button.place(x=15, y=600, width=200, height=100)
 
     def start_surveillance(self):
         cap = cv2.VideoCapture(0)
@@ -86,23 +93,37 @@ class GUI_2A2S:
 
         # update button
         if self.set_objectDetectionIsON:
-            self.object_detection_button.config(text="Toggle Object Detection: ON")
+            self.object_detection_button.config(text="Toggle Object Detection (ON)")
         else:
-            self.object_detection_button.config(text="Toggle Object Detection: OFF")
+            self.object_detection_button.config(text="Toggle Object Detection (OFF)")
         
         # update the parameter
         if self.Detector:
             self.Detector.objectDetectionIsON = self.set_objectDetectionIsON
 
     def update_min_contour(self, value):
-        value = int(value)
-        if value <= 10000:
-            self.Detector.min_contour_size = value
+        if hasattr (self, 'Detector'):
+            value = int(value)
+            if value <= 10000:
+                self.Detector.min_contour_size = value
 
     def update_obj_scan_duration(self, value):
-        value = int(value)
-        if 30 <= value <= 300:
-            self.Detector.obj_scan_duration = value
+        if hasattr (self, 'Detector'):
+            value = int(value)
+            if 30 <= value <= 300:
+                self.Detector.obj_scan_duration = value
+    
+    def update_frame_diff_threshold(self, value):
+        if hasattr (self, 'Detector'):
+            value = int(value)
+            if 10 <= value <= 1000:
+                self.Detector.frame_diff_threshold = value
+    
+    def update_bg_subtractor(self, value):
+        if hasattr (self, 'Detector'):
+            value = int(value)
+            if 5 <= value <= 1000:
+                self.Detector.hist = value
 
     def quit_application(self):
         self.master.destroy()

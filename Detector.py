@@ -30,11 +30,13 @@ class Detector_2A2S:
         self.frame_diff_threshold = 100
 
         # PARAMETERS: contours
-        self.min_contour_size = 5000
+        self.min_contour_size = 500
 
         # PARAMETERS: log files
         self.motion_logs_path = "./logs/motion_log.txt"
+        self.motion_frames_path = "./logs/motion_frames/"
         self.object_logs_path = "./logs/object_log.txt"
+        self.object_frames_path = "./logs/object_frames/"
         self.last_log_time = datetime.now() - timedelta(minutes=2) # make sure it starts writing at minute 0
 
         # PARAMETERS: object detection
@@ -156,7 +158,7 @@ class Detector_2A2S:
             foreground = self.bg_subtract.apply(frame_gray)
 
             # combine bg subtraction with frame diff
-            combined_frame = cv2.bitwise_or(frame_diff, foreground)
+            combined_frame = cv2.bitwise_and(frame_diff, foreground)
             _, combined_frame = cv2.threshold(combined_frame, self.frame_diff_threshold, 255, cv2.THRESH_BINARY)
 
             # contouring motion
@@ -171,13 +173,15 @@ class Detector_2A2S:
                 remaining_time = max(self.obj_scan_duration - scan_obj_elapsed_time.total_seconds(), 0)
                 cv2.putText(frame, f"[Scanning for OBJECTS ({remaining_time:.0f}s)]", (5, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 0, 0), 2)
                 
-                if(self.scan_obj_elapsed_time > timedelta(seconds=self.obj_scan_duration)):
+                if(scan_obj_elapsed_time > timedelta(seconds=self.obj_scan_duration)):
                     self.objectDetectionIsON = False
                     print(f"Switching to MOTION detection (self.objectDetectionIsON = False)")
                 
                 # TODO: do object detection here
                 results = self.model(frame, verbose=False)[0]
                 detections = sv.Detections.from_ultralytics(results)
+
+                print(f"detections:\n {detections.class_id}")
 
                 frame = self.boxAnnotator.annotate(
                     scene = frame,
@@ -199,7 +203,7 @@ class Detector_2A2S:
                         cv2.putText(frame, "[!] Motion Detected.", (5, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2)
                         
                         # write log
-                        self.write_motion_logs()
+                        self.write_motion_logs(frame)
 
                         # switch to OBJ DETECTION
                         self.objectDetectionIsON = True    
@@ -228,9 +232,10 @@ class Detector_2A2S:
         curr_date = date.today()
         return curr_date, curr_time
 
-    def write_motion_logs(self):
+    def write_motion_logs(self, frame):
         """
-        Handles log writing when MOTION is detected
+        - Handles log writing when MOTION is detected
+        - Saves current frame to "/logs/motion_frames/"
 
         Return: Void
         """
@@ -247,6 +252,16 @@ class Detector_2A2S:
                 curr_date, curr_time = self.get_curr_date_time()
                 motion_log_entry = f"Motion detected at {curr_time} on {curr_date}\n"
                 motion_log.write(motion_log_entry)
+            
+            # saving frame as png
+            timestamp = str(datetime.now())[:19].replace(":",";").replace(" ", "_") # replace chars to make sure filename is valid
+            filename = self.motion_frames_path + timestamp + ".png"
+            saved = cv2.imwrite(filename, frame)
+            if saved:
+                print(f"\nMotion frame saved successfully to {filename}")
+            else:
+                print(f"\nError occured when saving motion frame to: {filename}\n")
+            
 
     def write_object_logs(self):
         # TODO: write function
