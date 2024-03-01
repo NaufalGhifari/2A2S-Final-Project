@@ -195,9 +195,9 @@ class Detector_2A2S:
                 for c in contours_array:
                     size = cv2.contourArea(c)
                     if (size >= self.min_contour_size):
-                        # uncomment below to draw motion boxes
-                        #(x, y, w, h) = cv2.boundingRect(c)                    
-                        #cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+                        # draw motion boxes
+                        (x, y, w, h) = cv2.boundingRect(c)                    
+                        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
                         # add text top right corner
                         cv2.putText(frame, "[!] Motion Detected.", (5, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2)

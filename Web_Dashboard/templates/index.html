@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2A2S Dashboard</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="top_banner">
+        <h1 class="title">2A2S Dashboard</h1>
+    </div>
+    
+    <div class="image_box_container">
+        
+        <!-- template for each image in the directory -->
+        {% for image_file in image_files %}
+
+            <!-- each image is clickable and opens in a new tab -->
+            <a href="{{ url_for('serve_image', filename=image_file) }}" target="_blank" rel="noopener noreferrer">
+                
+                <div class="image_box">
+                    <img class="image_thumbnail" src="{{ url_for('serve_image', filename=image_file) }}" alt="{{ image_file }}">
+                    <h2 class="image_title">{{ image_file }}</h2>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            setInterval(function() {
+                location.reload();
+            }, 30000); // Refresh the page every 30 seconds
+        });
+    </script>
+</body>
+</html>

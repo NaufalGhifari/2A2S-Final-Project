@@ -1,0 +1,51 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.top_banner{
+    padding-top: 2.5%;
+    padding-bottom: 2.5%;
+    text-align: center;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    z-index: 999; /* Ensure it stays on top */
+    background-color: white;
+}
+
+.title{
+    font-size: 52px;
+    background: linear-gradient(to right, #00bfff, #3399ff, #6633cc);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.image_box_container{
+    text-align: center;
+
+    margin-top: 10%;
+}
+
+.image_box{
+    display: inline-block;
+    margin: 1%;
+    padding: 1%;
+    text-align: center;
+    background-color: rgb(238, 239, 240);
+    border-radius: 5%;
+
+}
+
+.image_title{
+    display: block;
+}
+
+.image_thumbnail{
+    display: inline;
+}

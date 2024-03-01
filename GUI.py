@@ -1,29 +1,41 @@
 import tkinter as tk
+from tkinter import filedialog
 from Detector import Detector_2A2S
 import cv2
 import threading
 from PIL import Image, ImageTk
+import subprocess
+import os
+import platform
+from flask import Flask, render_template, send_from_directory, jsonify
 
 class GUI_2A2S:
     def __init__(self, master):
         self.master = master
         self.master.title("2A2S Controls")
         self.master.geometry("1200x500")
+        self.logs_path = "./logs/"
+        self.operating_system = platform.system()
 
         # frame label (placeholder)
-        self.frame_label = tk.Label(self.master, bg="grey", text="2A2S: AI-Augmented Surveillance System\nPress \"Start Camera\" button to start video feed.\n(Allow ~15 seconds to boot up)", fg="white")
+        self.frame_label = tk.Label(self.master, bg="black", text="2A2S: AI-Augmented Surveillance System\n\nPress \"Start Camera\" button to start video feed.\n(During first object scanning iteration, allow program ~15 seconds to boot up)", fg="white")
         self.frame_label.place(x=280, y=10, width=630, height=480)
 
         # start detector
         self.start_button = tk.Button(self.master, text="Start Camera", background="dodgerblue1", fg="azure2", font=("Helvetica", 11, "bold"), command=self.start_surveillance)
         self.start_button.place(x=15, y=10, width=250, height=125)
 
+        # DASHBOARD ====================================================================================================================
+        self.dashboard_thread = threading.Thread(target=self.start_dashboard())
+        self.dashboard_thread.daemon = True
+        self.dashboard_thread.start()
+
         # PARAMETER CONTROL ====================================================================================================================
 
         # object detection toggle
         self.set_objectDetectionIsON = False
         self.object_detection_button = tk.Button(self.master, text="Toggle Object Detection (OFF)", command=self.toggle_object_detection)
-        self.object_detection_button.place(x=15, y=200, width=250, height=125)
+        self.object_detection_button.place(x=15, y=160, width=250, height=125)
 
         # Advanced parameters text
         self.text_adv_params = tk.Label(self.master, text="[!] Advanced Parameters [!]", font=("Arial", 14, "bold"))
@@ -55,11 +67,21 @@ class GUI_2A2S:
         self.slider_bg_subtract_hist.set(150)
         self.slider_bg_subtract_hist.place(x=930, y=420)
 
+        # open logs folder
+        self.button_logs_folder = tk.Button(self.master, text="Open Logs Directory", command=self.open_logs_folder)
+        self.button_logs_folder.place(x=15, y=310, width=250, height=125)
+
         # =======================================================================================================================================
 
         # quit application
         #self.quit_button = tk.Button(self.master, text="Quit", command=self.quit_application, background="firebrick1", fg="azure2")
         #self.quit_button.place(x=15, y=600, width=200, height=100)
+
+    def start_dashboard(self):
+        """Runs dashboard, intended to be ran on a separate thread"""
+        os.chdir("./Web_Dashboard")
+        venv_path = "C:\PythonEnvs\CM3070_FinalProject\Scripts\python.exe"
+        subprocess.run([venv_path, "dashboard.py"])
 
     def start_surveillance(self):
         cap = cv2.VideoCapture(0)
@@ -124,6 +146,24 @@ class GUI_2A2S:
             value = int(value)
             if 5 <= value <= 1000:
                 self.Detector.hist = value
+        
+    def open_logs_folder(self):
+        """
+        Opens the directory that contains log information.
+        Able to work on: Windows and Linux.
+        Return: Void
+        """
+        
+        # find the absolute path of the logs dir
+        absolute_path = os.path.abspath(self.logs_path)
+        
+        # check OS and open accordingly
+        if self.operating_system == "Windows":
+            subprocess.Popen(['explorer', absolute_path])
+        elif self.operating_system == "Linux":
+            subprocess.Popen(['xdg-open', absolute_path])
+        else:
+            print("\nError while trying to open logs folder: Unsupported OS.\n")
 
     def quit_application(self):
         self.master.destroy()
