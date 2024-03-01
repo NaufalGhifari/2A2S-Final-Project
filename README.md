@@ -1,15 +1,15 @@
 # AI Augmented Surveillance System - 2A2S
 Off the shelf webcam/CCTV surveillance system augmented with motion detection, object detection models, and email alert system.  
-Final year project for BSc in Computer Science at University of London (AI & Machine Learning).
+Final year project for BSc in Computer Science at University of London (AI & Machine Learning).  
+
+**Note**: This project is part of a final year university assignment. You are NOT to copy codes present in this repository whether it be in whole or in part for your own assignment; doing so would result in a violation of academic integrity in the form of plagiarism.
 
 # 💡 2A2S Features
 Features included in this project:  
 - GUI
+- Web application dashboard
 - Motion detection
-- Object detection
-  - Fire
-  - Smoke
-  - Intruder
+- Object detection using YoloV8
 - Email alert system
 
 ## Workflow
@@ -30,7 +30,8 @@ Features included in this project:
 - [PyTorch](https://pytorch.org/get-started/locally/)
 - [Tkinter](https://docs.python.org/3/library/tkinter.html)
 - [Threading](https://docs.python.org/3/library/threading.html)
-- Other: sys, unittest, datetime
+- [Flask](https://flask.palletsprojects.com/en/3.0.x/)
+- Other: sys, unittest, datetime, subprocess, etc.
 
 # 👷‍♂ To-Do:
 - [x] Initialise project
@@ -39,11 +40,11 @@ Features included in this project:
 - [x] Add timer function
 - [x] Implement trained models
 - [x] Implement logs for motion detection
-- [ ] Implement logs for object detections
 - [x] Add save snippet function
 - [x] Email alert system for MOTION
-- [ ] Email alert system for OBJECTS
-- [ ] Implement GUI
+- [x] Develop Dashboard web application
+- [x] Integrate Dashboard to the rest of the system
+- [x] Implement GUI
   - [x] Start program button
   - [x] Minimum contour slider
   - [x] Object scan duration slider
@@ -51,6 +52,8 @@ Features included in this project:
   - [x] Frame differencing threshold slider
 
 # 👨‍🏫 Further improvements ideas
+- [ ] Implement logs for object detections
+- [ ] Email alert system for OBJECTS
 - [ ] Train custom object detection models:
   - [ ] Fire
   - [ ] Smoke
