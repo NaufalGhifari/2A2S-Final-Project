@@ -10,7 +10,6 @@ import cv2
 import supervision as sv
 from ultralytics import YOLO
 from datetime import datetime, date, timedelta, time
-from PIL import Image, ImageTk
 import Email_Alert
 import torch
 
@@ -262,7 +261,7 @@ class Detector_2A2S:
                     print(f"Switching to MOTION detection (self.objectDetectionIsON = False)")
                 
                 # TODO: do object detection here
-                results = self.model.predict(frame, stream=True, verbose=False)[0]
+                results = self.model(frame, verbose=False)[0]
                 detections = sv.Detections.from_ultralytics(results)
 
                 # debug
@@ -278,8 +277,8 @@ class Detector_2A2S:
 
                 frame = self.boxAnnotator.annotate(
                     scene = frame,
-                    detections = results
-                )  
+                    detections = detections
+                )
                 
             # MOTION DETECTION =================================================================================================
             else:

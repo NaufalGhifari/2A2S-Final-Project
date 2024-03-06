@@ -7,7 +7,7 @@ from PIL import Image, ImageTk
 import subprocess
 import os
 import platform
-from flask import Flask, render_template, send_from_directory, jsonify
+import sys
 
 class GUI_2A2S:
     def __init__(self, master):
@@ -24,11 +24,6 @@ class GUI_2A2S:
         # start detector
         self.start_button = tk.Button(self.master, text="Start Camera", background="dodgerblue1", fg="azure2", font=("Helvetica", 11, "bold"), command=self.start_surveillance)
         self.start_button.place(x=15, y=10, width=250, height=125)
-
-        # DASHBOARD ====================================================================================================================
-        self.dashboard_thread = threading.Thread(target=self.start_dashboard())
-        self.dashboard_thread.daemon = True
-        self.dashboard_thread.start()
 
         # PARAMETER CONTROL ====================================================================================================================
 
@@ -79,9 +74,21 @@ class GUI_2A2S:
 
     def start_dashboard(self):
         """Runs dashboard, intended to be ran on a separate thread"""
-        os.chdir("./Web_Dashboard")
-        venv_path = "C:\PythonEnvs\CM3070_FinalProject\Scripts\python.exe"
-        subprocess.run([venv_path, "dashboard.py"])
+        try:
+            self.venv_path = "C:\PythonEnvs\CM3070_FinalProject\Scripts\python.exe"
+            subprocess.run([self.venv_path, "./dashboard.py"])
+        
+        except subprocess.CalledProcessError as err:
+            print(f"Error occured while starting Dashboard: {err}")
+    
+    """ def stop_flask_server(self):
+        # Necessary because flask needs to be explicitly shutdown
+        pid_file = 'flask_server.pid'
+        if os.path.exists(pid_file):
+            with open(pid_file, 'r') as f:
+                pid = int(f.read())
+            os.kill(pid, signal.SIGINT)  # Send SIGINT signal to gracefully stop the server
+            os.remove(pid_file)  # Remove the PID file """
 
     def start_surveillance(self):
         cap = cv2.VideoCapture(0)
@@ -91,6 +98,11 @@ class GUI_2A2S:
         surveillance_thread = threading.Thread(target=self.Detector.motion_object_scanner)
         surveillance_thread.daemon = True  # terminate thread when main program exits
         surveillance_thread.start()
+
+        # DASHBOARD ====================================================================================================================
+        self.dashboard_thread = threading.Thread(target=self.start_dashboard)
+        self.dashboard_thread.daemon = True
+        self.dashboard_thread.start()
 
         self.update_frame()
 
@@ -172,6 +184,9 @@ def main():
     root = tk.Tk()
     app = GUI_2A2S(root)
     root.mainloop()
+
+    # make sure flask server shuts down
+    sys.exit()
 
 if __name__ == "__main__":
     main()

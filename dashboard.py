@@ -5,7 +5,7 @@ import time
 app = Flask(__name__, template_folder='templates')
 
 # define images directory
-IMAGE_FOLDER = '../logs/motion_frames/'
+IMAGE_FOLDER = './logs/motion_frames/'
 
 # Route to serve the images
 @app.route('/images/<path:filename>')
