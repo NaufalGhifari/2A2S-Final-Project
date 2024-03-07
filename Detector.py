@@ -184,21 +184,26 @@ class Detector_2A2S:
     def reset_obj_detector_timer():
         pass
 
-    def check_time_for_alert(self):
+    def check_isSendingAlerts(self, now=datetime.now().time()):
         """
-        Checks whether or not the program should send alerts based on a specified time bracket.
-
+        Checks if self.isSendingAlerts should be True or False depending on the current time.
         Return: Boolean
         """
-        now = datetime.now()
-        start = datetime.combine(now.date(), self.alert_time_start)
-        end = datetime.combine(now.date(), self.alert_time_end)
-        
-        # if end < start, meaning end is the next day
-        if end < start:
-            end = end + timedelta(days=1)
-        
-        return start <= now <= end
+        # get the hour and minute in int
+        start_hour = int(self.alert_time_start.split(":")[0])
+        start_min = int(self.alert_time_start.split(":")[1])
+        end_hour = int(self.alert_time_end.split(":")[0])
+        end_min = int(self.alert_time_end.split(":")[1])
+
+        # process the times
+        start = time(hour=start_hour, minute=start_min, second=00)
+        end = time(hour=end_hour, minute=end_min, second=00)
+        #now = datetime.now().time()
+
+        if start < end:
+            return start <= now <= end
+        else:
+            return now >= start or now <= end
     
     def get_export_frame(self):
         """
@@ -213,7 +218,7 @@ class Detector_2A2S:
         
         while True:
             # check current time to send alerts or not
-            if self.check_time_for_alert() == True:
+            if self.check_isSendingAlerts() == True:
                 self.isSendingAlerts = True
             else:
                 self.isSendingAlerts = False

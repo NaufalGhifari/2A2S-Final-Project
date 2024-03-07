@@ -33,7 +33,8 @@ class TestMySurveillance(unittest.TestCase):
         self.Surveillance.motion_logs_path = "./logs/motion_log.txt"
         
         # call the function
-        self.Surveillance.write_motion_logs()
+        _, frame = self.cap.read()
+        self.Surveillance.write_motion_logs(frame)
 
         # Assert that the motion log was written
         with open("./logs/motion_log.txt", "r") as f:
@@ -44,23 +45,20 @@ class TestMySurveillance(unittest.TestCase):
         current_time = datetime.now()
         self.assertGreaterEqual(current_time, self.Surveillance.last_log_time)
 
-    def test_check_time_for_alert(self):
-        alert_time_start = time(hour=20, minute=0)
-        alert_time_end = time(hour=8, minute=0)
-    
-        # Get current time (for testing, set it at 01:00)
-        current_time = time(hour=1, minute=0)
+    # PICKUP HERE
+    def test_check_isSendingAlert(self):
+        self.Surveillance.alert_time_start = "21:00"
+        self.Surveillance.alert_time_end = "07:00"
 
-        print(alert_time_start)
-        print(alert_time_end)
-
-        # Check if the current time falls within the alert time bracket
-        result = alert_time_start <= current_time <= alert_time_end
-
-        print(f"result: {result}")
-
-        # Assert the result 
+        # create a mock 'now' time, then assert True
+        mock_now = time(hour=23, minute=30, second=00)
+        result = self.Surveillance.check_isSendingAlerts(mock_now)
         self.assertTrue(result)
+
+        # create a mock time, then assert False
+        mock_now = time(hour=19, minute=30, second=00)
+        result = self.Surveillance.check_isSendingAlerts(mock_now)
+        self.assertFalse(result)
 
 
 if __name__ == "__main__":

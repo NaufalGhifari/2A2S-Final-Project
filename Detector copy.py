@@ -46,8 +46,8 @@ class Detector_2A2S:
         self.model_path = "yolov8n.pt"
 
         # PARAMETERS: Alert system
-        self.alert_time_start = time(hour=20, minute=0)
-        self.alert_time_end = time(hour=8, minute=0)
+        self.alert_time_start = "21:00"
+        self.alert_time_end = "07:00"
         self.isSendingAlerts = False
         self.user_alerter = Email_Alert.email_alert_system()
 
