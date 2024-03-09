@@ -13,3 +13,7 @@ Motion detected at 13:03:29 on 2024-02-08
 Motion detected at 14:31:38 on 2024-02-11
 Motion detected at 15:04:25 on 2024-03-07
 Motion detected at 15:06:22 on 2024-03-07
+Motion detected at 17:59:10 on 2024-03-08
+Motion detected at 18:08:46 on 2024-03-08
+Motion detected at 18:19:45 on 2024-03-08
+Motion detected at 18:20:56 on 2024-03-08

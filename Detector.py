@@ -190,10 +190,11 @@ class Detector_2A2S:
         Return: Boolean
         """
         # get the hour and minute in int
-        start_hour = int(self.alert_time_start.split(":")[0])
-        start_min = int(self.alert_time_start.split(":")[1])
-        end_hour = int(self.alert_time_end.split(":")[0])
-        end_min = int(self.alert_time_end.split(":")[1])
+        # ERROR: FIX THIS by turning it into a str first (maybe)
+        start_hour = int(str(self.alert_time_start).split(":")[0])
+        start_min = int(str(self.alert_time_start).split(":")[1])
+        end_hour = int(str(self.alert_time_end).split(":")[0])
+        end_min = int(str(self.alert_time_end).split(":")[1])
 
         # process the times
         start = time(hour=start_hour, minute=start_min, second=00)

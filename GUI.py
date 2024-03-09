@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import messagebox
 from Detector import Detector_2A2S
 import cv2
 import threading
@@ -13,7 +13,7 @@ class GUI_2A2S:
     def __init__(self, master):
         self.master = master
         self.master.title("2A2S Controls")
-        self.master.geometry("1200x500")
+        self.master.geometry("1200x700")
         self.logs_path = "./logs/"
         self.operating_system = platform.system()
 
@@ -66,6 +66,31 @@ class GUI_2A2S:
         self.button_logs_folder = tk.Button(self.master, text="Open Logs Directory", command=self.open_logs_folder)
         self.button_logs_folder.place(x=15, y=310, width=250, height=125)
 
+        # PICKUP HERE
+        # alert times update entries ==============================================
+
+        # start time
+        tk.Label(self.master, text="Start alerts at (HH:MM)").place(x=15, y=500)
+        self.start_h_entry = tk.Entry(self.master, width=7)
+        self.start_h_entry.place(x=150, y=500)
+        
+        tk.Label(self.master, text=":").place(x=194, y=500)
+        self.start_m_entry = tk.Entry(self.master, width=7)
+        self.start_m_entry.place(x=210, y=500)
+        
+        # end time
+        tk.Label(self.master, text="Stop alerts at (HH:MM)").place(x=15, y=560)
+        self.end_h_entry = tk.Entry(self.master, width=7)
+        self.end_h_entry.place(x=150, y=560)
+        
+        tk.Label(self.master, text=":").place(x=194, y=560)
+        self.end_m_entry = tk.Entry(self.master, width=7)
+        self.end_m_entry.place(x=210, y=560)
+        
+        # Update Button
+        self.update_button = tk.Button(self.master, text="Update Alert Times", command=self.update_isSendingAlert_time)
+        self.update_button.place(x=15, y=620)
+
         # =======================================================================================================================================
 
         # quit application
@@ -105,6 +130,35 @@ class GUI_2A2S:
         self.dashboard_thread.start()
 
         self.update_frame()
+
+    # PICKUP HERE
+    def update_isSendingAlert_time(self):
+        """updates the times on which the system sends email alerts"""
+
+        # get the values from the entry fields
+        start_h = self.start_h_entry.get()
+        start_m = self.start_m_entry.get()
+        end_h = self.end_h_entry.get()
+        end_m = self.end_m_entry.get()
+
+        try:
+            # store times into lists
+            hours = [int(start_h), int(end_h)]
+            minutes = [int(start_m), int(end_m)]
+            
+            # values too large or too small
+            if max(hours) > 24 or min(hours) < 0 or max(minutes) > 59 or min(minutes) < 0:
+                raise ValueError('GUI_2A2S.update_isSendingAlert_time: \'hours\' or \'minutes\' list contains invalid value(s)')
+            
+            # values are good to go
+            else:
+                self.Detector.alert_time_start = f"{hours[0]}:{minutes[0]}"
+                self.Detector.alert_time_end = f"{hours[1]}:{minutes[1]}"
+            
+            messagebox.showinfo("Success!", "Alert times updated successfully!")
+        
+        except ValueError as e:
+            messagebox.showerror("Error!", str(e))
 
     def update_frame(self):
         if hasattr (self, 'Detector'):
