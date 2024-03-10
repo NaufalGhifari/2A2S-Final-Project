@@ -68,28 +68,34 @@ class GUI_2A2S:
 
         # PICKUP HERE
         # alert times update entries ==============================================
+        self.text_config_alert = tk.Label(self.master, text="[Configure email alert time]", font=("Arial", 12, "bold"))
+        self.text_config_alert.place(x=15, y=455)
 
         # start time
-        tk.Label(self.master, text="Start alerts at (HH:MM)").place(x=15, y=500)
+        tk.Label(self.master, text="Start alerts at (HH:MM)").place(x=15, y=490)
         self.start_h_entry = tk.Entry(self.master, width=7)
-        self.start_h_entry.place(x=150, y=500)
+        self.start_h_entry.place(x=150, y=490)
         
-        tk.Label(self.master, text=":").place(x=194, y=500)
+        tk.Label(self.master, text=":").place(x=194, y=490)
         self.start_m_entry = tk.Entry(self.master, width=7)
-        self.start_m_entry.place(x=210, y=500)
+        self.start_m_entry.place(x=210, y=490)
         
         # end time
-        tk.Label(self.master, text="Stop alerts at (HH:MM)").place(x=15, y=560)
+        tk.Label(self.master, text="Stop alerts at (HH:MM)").place(x=15, y=530)
         self.end_h_entry = tk.Entry(self.master, width=7)
-        self.end_h_entry.place(x=150, y=560)
+        self.end_h_entry.place(x=150, y=530)
         
-        tk.Label(self.master, text=":").place(x=194, y=560)
+        tk.Label(self.master, text=":").place(x=194, y=530)
         self.end_m_entry = tk.Entry(self.master, width=7)
-        self.end_m_entry.place(x=210, y=560)
+        self.end_m_entry.place(x=210, y=530)
         
-        # Update Button
-        self.update_button = tk.Button(self.master, text="Update Alert Times", command=self.update_isSendingAlert_time)
-        self.update_button.place(x=15, y=620)
+        # update alert times button
+        self.button_alert_times = tk.Button(self.master, text="Update Alert Times", command=self.update_isSendingAlert_time)
+        self.button_alert_times.place(x=15, y=590)
+
+        # toggle isSendingAlerts button
+        self.button_isSendingAlerts = tk.Button(self.master, text="Alert time set to default (20:00 - 08:00)")
+        self.button_isSendingAlerts.place(x=15, y=560)
 
         # =======================================================================================================================================
 
@@ -131,7 +137,7 @@ class GUI_2A2S:
 
         self.update_frame()
 
-    # PICKUP HERE
+    # PICKUP HERE        
     def update_isSendingAlert_time(self):
         """updates the times on which the system sends email alerts"""
 
@@ -154,11 +160,20 @@ class GUI_2A2S:
             else:
                 self.Detector.alert_time_start = f"{hours[0]}:{minutes[0]}"
                 self.Detector.alert_time_end = f"{hours[1]}:{minutes[1]}"
+                self.Detector.isSendingAlerts = True
             
-            messagebox.showinfo("Success!", "Alert times updated successfully!")
+            messagebox.showinfo("Success!", f"Alert times updated successfully!\n2A2S is sending alerts from {hours[0]}:{minutes[0]} to {hours[1]}:{minutes[1]}")
         
         except ValueError as e:
             messagebox.showerror("Error!", str(e))
+        
+        # update status visual button
+        # sending alerts
+        if self.Detector.isSendingAlerts:
+            self.button_isSendingAlerts.config(text=f"Sending alerts status: ON", fg="white", bg="green")
+        # not sending alerts
+        else:
+            self.button_isSendingAlerts.config(text=f"Sending alerts status: OFF", fg="white", bg="red")
 
     def update_frame(self):
         if hasattr (self, 'Detector'):
