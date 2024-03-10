@@ -10,7 +10,6 @@ import cv2
 import supervision as sv
 from ultralytics import YOLO
 from datetime import datetime, date, timedelta, time
-from PIL import Image, ImageTk
 import Email_Alert
 import torch
 
@@ -180,9 +179,6 @@ class Detector_2A2S:
             text_thickness = 2,
             text_scale = 1
         )
-    
-    def reset_obj_detector_timer():
-        pass
 
     def check_isSendingAlerts(self, now=datetime.now().time()):
         """
@@ -267,8 +263,7 @@ class Detector_2A2S:
                     self.objectDetectionIsON = False
                     print(f"Switching to MOTION detection (self.objectDetectionIsON = False)")
                 
-                # TODO: do object detection here
-                results = self.model.predict(frame, stream=True, verbose=False)[0]
+                results = self.model(frame, verbose=False)[0]
                 detections = sv.Detections.from_ultralytics(results)
 
                 # debug
@@ -284,7 +279,7 @@ class Detector_2A2S:
 
                 frame = self.boxAnnotator.annotate(
                     scene = frame,
-                    detections = results
+                    detections = detections
                 )  
                 
             # MOTION DETECTION =================================================================================================
@@ -360,13 +355,6 @@ class Detector_2A2S:
                 print(f"\nMotion frame saved successfully to {filename}")
             else:
                 print(f"\nError occured when saving motion frame to: {filename}\n")
-            
-
-    def write_object_logs(self):
-        # TODO: write function
-        pass
-
-    # USER ALERT SYSTEM ======================================================================================================================
 
 def main():
     cap = cv2.VideoCapture(0)

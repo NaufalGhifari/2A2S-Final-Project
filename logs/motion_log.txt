@@ -173,3 +173,6 @@ Motion detected at 22:17:56 on 2024-03-01
 Motion detected at 22:19:07 on 2024-03-01
 Motion detected at 22:47:59 on 2024-03-09
 Motion detected at 09:05:27 on 2024-03-10
+Motion detected at 09:53:32 on 2024-03-10
+Motion detected at 09:55:23 on 2024-03-10
+Motion detected at 10:00:14 on 2024-03-10

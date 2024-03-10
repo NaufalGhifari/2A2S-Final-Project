@@ -1,6 +1,5 @@
-from flask import Flask, render_template, send_from_directory, jsonify
+from flask import Flask, render_template, send_from_directory
 import os
-import time
 
 app = Flask(__name__, template_folder='templates')
 

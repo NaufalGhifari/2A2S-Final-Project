@@ -109,9 +109,7 @@ class TestMySurveillance(unittest.TestCase):
     
     # TODOS
     def check_update_min_contour(self):
-        """
-        Return: Void
-        """
+        pass
 
     def check_update_obj_scan_duration(self):
         pass
