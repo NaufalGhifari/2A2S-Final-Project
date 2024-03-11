@@ -1,7 +1,7 @@
 from flask import Flask, render_template, send_from_directory
 import os
 
-app = Flask(__name__, template_folder='templates')
+app = Flask(__name__, template_folder='./Web_Dashboard/templates/', static_folder='./Web_Dashboard/static')
 
 # define images directory
 IMAGE_FOLDER = './logs/motion_frames/'
@@ -22,5 +22,4 @@ def index():
     return render_template('index.html', image_files=image_files)
 
 if __name__ == '__main__':
-    # app.run(debug=True)
-    app.run(host='0.0.0.0', port=2425)
+    app.run(host='0.0.0.0', port=2425, debug=True)

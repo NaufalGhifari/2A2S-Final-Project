@@ -39,7 +39,7 @@ class GUI_2A2S:
         # min contour slider
         self.text_min_contour = tk.Label(self.master, text="Minimum contour (0-10,000)")
         self.text_min_contour.place(x=930, y=100)
-        self.slider_min_contour = tk.Scale(self.master, from_=10, to=1500, orient="horizontal", length=220, command=self.update_min_contour)
+        self.slider_min_contour = tk.Scale(self.master, from_=10, to=10000, orient="horizontal", length=220, command=self.update_min_contour)
         self.slider_min_contour.set(500)
         self.slider_min_contour.place(x=930, y=120)
 
