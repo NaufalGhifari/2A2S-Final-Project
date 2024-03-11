@@ -106,19 +106,6 @@ class TestMySurveillance(unittest.TestCase):
         initial_val = self.mock_GUI.set_objectDetectionIsON
         updated_val = self.mock_GUI.toggle_object_detection()
         self.assertFalse(initial_val == updated_val)
-    
-    # TODOS
-    def check_update_min_contour(self):
-        pass
-
-    def check_update_obj_scan_duration(self):
-        pass
-    
-    def check_update_frame_diff_threshold(self):
-        pass
-    
-    def check_update_bg_subtractor(self):
-        pass
 
 if __name__ == "__main__":
     unittest.main()
